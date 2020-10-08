@@ -1,0 +1,72 @@
+<?php
+/**
+ * @file
+ * Custom functions for Views Bootstrap.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\views_vmsit\ViewsVmsit;
+use Drupal\Core\Template\Attribute;
+/**
+ * Implements hook_theme().
+ */
+/**
+ * setting variable ID
+ */
+$id = "NA";
+$arrow = true;
+$dots = true;
+$variablewidth = true;
+$speed = 2000;
+$infinite = true;
+
+function views_vmsit_theme() {
+  return ViewsVmsit::getThemeHooks();
+}
+/**
+ * Implement template_preprocess();
+ */
+function template_preprocess_views_vmsit_carousel(array &$vars) {
+  global $id;
+  global $arrow;
+  global $dots;
+  global $variablewidth;
+  global $speed;
+  global $infinite;
+  $view = $vars['view'];
+  $vars['id'] = ViewsVmsit::getUniqueId($view);
+  $id = $vars['id'];
+  $vars['attributes']['class'][] = 'views-bootstrap-media-object';
+  $vars['attributes']['class'][] = 'media-list';
+  // Carousel options.
+  $vars['arrow'] = $view->style_plugin->options['arrow'];
+  $arrow = $vars['arrow'];
+  $vars['dots'] = $view->style_plugin->options['dots'];
+  $dots = $vars['dots'];
+  $vars['variablewidth'] = $view->style_plugin->options['variablewidth'];
+  $variablewidth = $vars['variablewidth'];
+  $vars['speed'] = $view->style_plugin->options['speed'];
+  $speed = $vars['speed'];
+  $vars['infinite'] = $view->style_plugin->options['infinite'];
+  $infinite = $vars['infinite']; 
+}
+/**
+ * Implements hook_page_attachments().
+ */
+function views_vmsit_page_attachments(array &$page) {
+  global $id;
+  global $arrow;
+  global $dots;
+  global $variablewidth;
+  global $speed;
+  global $infinite;
+  $page['#attached']['library'][] = 'views_vmsit/components';
+  $page['#attached']['library'][] = 'vmsit/slickfrontpage';
+  $page['#attached']['drupalSettings']['slick_var_id'] = $id;
+  $page['#attached']['drupalSettings']['slick_var_arrow'] = $arrow;
+  $page['#attached']['drupalSettings']['slick_var_dots'] = $dots;
+  $page['#attached']['drupalSettings']['slick_var_variablewidth'] = $variablewidth;
+  $page['#attached']['drupalSettings']['slick_var_speed'] = $speed;
+  $page['#attached']['drupalSettings']['slick_var_infinite'] = $infinite;
+  return $page;
+}
